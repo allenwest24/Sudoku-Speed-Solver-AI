@@ -1,13 +1,37 @@
 class Solution:
-    # TODO: Implement.
-    # Modifies the current list of valid numbers to only include valid numbers for the Row.
+    # Modifies the current list of valid numbers to only include valid numbers for the row.
     def allowedInRow(possibleNumbers, board, ii, jj):
-        return possibleNumbers
+        stillPossible = ''
+        for x in possibleNumbers:
+            # Have not seen this number in the row by default.
+            inRow = False
+            for y in board[ii]:
+                # If this number already exists in the row, do not add it to the output list.
+                if x == y:
+                    inRow = True
+                    break
+            if not inRow:
+                stilPossible += x
+                    
+        # Return what is still possible after trimming down.
+        return stillPossible
     
-    # TODO: Implement.
-    # Modifies the current list of valid numbers to only include valid numbers for the Column.
+    # Modifies the current list of valid numbers to only include valid numbers for the column.
     def allowedInColumn(possibleNumbers, board, ii, jj):
-        return possibleNumbers
+        stillPossible = ''
+        for x in possibleNumbers:
+            # Have not seen this number in the column by default.
+            inColumn = False
+            for y in range(len(board)):
+                # If this number already exists in the column, do not add it to the output list.
+                if x == board[ii][y]:
+                    inColumn = True
+                    break
+            if not inColumn:
+                stilPossible += x
+                    
+        # Return what is still possible after trimming down.
+        return stillPossible
 
     # TODO: Implement.
     # Modifies the current list of valid numbers to only include valid numbers for the box.
@@ -23,7 +47,9 @@ class Solution:
         possibleNumbers = allowedInColumn(possibleNumbers, board, ii, jj)
         possibleNumbers = allowedInBox(possibleNumbers, board, ii, jj)
         if len(possibleNumbers) == 1:
-            return True, possibleNumbers[0]
+            return possibleNumbers[0]
+        else:
+            return '.'
     
     # Solves the puzzle in-place.
     def solveSudoku(self, board: List[List[str]]) -> None:
@@ -33,7 +59,5 @@ class Solution:
                 curr = board[ii][jj]
                 if curr == '.':
                     # Check if there is only one possible option here. If so, assign the number.
-                    huh, num = checkIfOnlySolution(board, ii, jj)
-                    if huh:
-                        board[ii][jj] = num
-                        
+                    num = checkIfOnlySolution(board, ii, jj)
+                    board[ii][jj] = num
