@@ -3,7 +3,7 @@ class Solution:
         """
         Do not return anything, modify board in-place instead.
         """
-            # Take the list of currently possible numbers and trim down to only those allowed by row rules.
+        # Take the list of currently possible numbers and trim down to only those allowed by row rules.
         def allowedInRow(possibleNumbers, board, ii, jj):
             stillPossible = ''
             for x in possibleNumbers:
@@ -20,7 +20,7 @@ class Solution:
             # Return what is still possible after trimming down.
             return stillPossible
 
-         # Take the list of currently possible numbers and trim down to only those allowed by column rules.
+        # Take the list of currently possible numbers and trim down to only those allowed by column rules.
         def allowedInColumn(possibleNumbers, board, ii, jj):
             stillPossible = ''
             for x in possibleNumbers:
@@ -37,7 +37,20 @@ class Solution:
             # Return what is still possible after trimming down.
             return stillPossible
 
+        # Find which box it is in:
+        # 1 2 3
+        # 4 5 6 
+        # 7 8 9
+        def whatBoxNum(ii, jj):
+            height = ii // 3
+            length = (jj // 3) + 1
+            box = (height * 3) + length
+            return box
+        
+        # Take the list of currently possible numbers and trim down to only those allowed by column rules.
         def allowedInBox(possibleNumbers, board, ii, jj):
+            # Helper to decide which box to assess.
+            box_num = whatBoxNum(ii, jj)
             return possibleNumbers
 
         def checkIfOnlySolution(board, ii, jj):
