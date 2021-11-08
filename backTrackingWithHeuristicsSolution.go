@@ -61,7 +61,7 @@ func assessBoard(board [][]byte) [9][9]int {
 // Solve the sudoku puzzle.
 func solve(board [][]byte) bool {
     var heuristicBoard [9][9]int = assessBoard(board)
-    fmt.Print(heuristicBoard)
+    //fmt.Print(heuristicBoard)
     var currBest = 0
     var currBestii = 0
     var currBestjj = 0
@@ -100,8 +100,44 @@ func solve(board [][]byte) bool {
 	return false
 }
 
+func prioritize(board [][]byte) []int {
+    var valueQueue []int
+    var positionQueue []int
+    var tempValueQueue []int
+    var tempPositionQueue []int
+    var valuesAllowedInCurr int = 0
+    for ii := 0; ii < SQUARE_LENGTH; ii++ {
+        for jj := 0; jj < SQUARE_LENGTH; jj++ {
+            if (board[ii][jj] != '.') {
+				continue
+			}
+            for val := byte('1'); val <= byte('9'); val++ {
+                // Check to see if this value fits into the current solution.
+				if isValid(board, ii, jj, val) {
+					valuesAllowedInCurr++
+                }
+            }
+            for kk := 0; kk < len(valueQueue); kk++ {
+                if valueQueue[kk] >= valuesAllowedInCurr {
+                    tempValueQueue = append(valueQueue[:kk], valuesAllowedInCurr)
+                    tempPositionQueue = append(positionQueue[:kk], ((ii * 10) + jj))
+                    valueQueue = append(tempValueQueue, valueQueue[kk:])
+                    positionQueue = append(tempPositionQueue, positionQueue[kk:])
+                    break
+                }
+            }
+            valueQueue = append(valueQueue, valuesAllowedInCurr)
+            valuesAllowedInCurr = 0
+        }
+    }
+    fmt.Print(valueQueue)
+    return positionQueue
+}
+
 // Invokes a helper method that can recursively call itself then return the valid solution.
 func solveSudoku(board [][]byte) {
-	solve(board)
+    var heuristicQueue []int = prioritize(board)
+    heuristicQueue = append(heuristicQueue, 1)
+    solve(board)
 }
 
