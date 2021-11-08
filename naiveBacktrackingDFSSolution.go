@@ -1,7 +1,7 @@
-// This is the naive implementation of backtracking.
-
+// Size of side of square.
 const SQUARE_LENGTH = 9
 
+// Checks if a given value is valid at a given position.
 func isValid(board [][]byte, row, column int, val byte) bool {
     for ii := 0; ii < SQUARE_LENGTH; ii++ {
         // Is this value already in this column?
