@@ -103,8 +103,8 @@ func solve(board [][]byte) bool {
 func prioritize(board [][]byte) []int {
     var valueQueue []int
     var positionQueue []int
-    var tempValueQueue []int
-    var tempPositionQueue []int
+    //var tempValueQueue []int
+    //var tempPositionQueue []int
     var valuesAllowedInCurr int = 0
     for ii := 0; ii < SQUARE_LENGTH; ii++ {
         for jj := 0; jj < SQUARE_LENGTH; jj++ {
@@ -122,30 +122,40 @@ func prioritize(board [][]byte) []int {
                 positionQueue = append(positionQueue, ((ii * 10) + jj))
                 continue
             } else {
-                for kk := 0; kk < len(valueQueue); kk++ {
-                    if valueQueue[kk] >= valuesAllowedInCurr || kk == (len(valueQueue) - 1) {
-                        tempValueQueue = append(valueQueue[:kk], valuesAllowedInCurr)
-                        tempPositionQueue = append(positionQueue[:kk], ((ii * 10) + jj))
-                        for ll := kk; ll < len(valueQueue); ll++ {
-                            tempValueQueue = append(tempValueQueue, valueQueue[ll])
-                        }
-                        for mm := kk; mm < len(positionQueue); mm++ {
-                            tempPositionQueue = append(tempPositionQueue, valueQueue[mm])
-                        }
+                for kk := 0; kk <= len(valueQueue); kk++ {
+                    if kk == len(valueQueue) {
+                        valueQueue = append(valueQueue, valuesAllowedInCurr)
+                        positionQueue = append(positionQueue, ((ii * 10) + jj))
+                        break
+                    }
+                    if valueQueue[kk] >= valuesAllowedInCurr {
+                        valueQueue = append(valueQueue[:kk+1], valueQueue[kk:]...)
+                        valueQueue[kk] = valuesAllowedInCurr
+                        positionQueue = append(positionQueue[:kk+1], positionQueue[kk:]...)
+                        positionQueue[kk] = ((ii * 10) + jj)
+                        //tempValueQueue = append(valueQueue[:kk], valuesAllowedInCurr)
+                        //tempPositionQueue = append(positionQueue[:kk], ((ii * 10) + jj))
+                        //for ll := kk; ll < len(valueQueue); ll++ {
+                        //    tempValueQueue = append(tempValueQueue, valueQueue[ll])
+                        //}
+                        //for mm := kk; mm < len(positionQueue); mm++ {
+                        //    tempPositionQueue = append(tempPositionQueue, valueQueue[mm])
+                        //}
 
                         break
                     }
                 }
             }
-            valueQueue = tempValueQueue
+            //valueQueue = tempValueQueue
             fmt.Print(valueQueue)
-            positionQueue = tempPositionQueue
-            tempValueQueue = tempValueQueue[:0]
-            tempPositionQueue = tempPositionQueue[:0]
+            //positionQueue = tempPositionQueue
+            //tempValueQueue = tempValueQueue[:0]
+            //tempPositionQueue = tempPositionQueue[:0]
             valuesAllowedInCurr = 0
         }
     }
-    fmt.Print(valueQueue)
+    //fmt.Print(valueQueue)
+    fmt.Print(positionQueue)
     return positionQueue
 }
 
