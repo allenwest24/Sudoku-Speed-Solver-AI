@@ -117,16 +117,29 @@ func prioritize(board [][]byte) []int {
 					valuesAllowedInCurr++
                 }
             }
-            for kk := 0; kk < len(valueQueue); kk++ {
-                if valueQueue[kk] >= valuesAllowedInCurr {
-                    tempValueQueue = append(valueQueue[:kk], valuesAllowedInCurr)
-                    tempPositionQueue = append(positionQueue[:kk], ((ii * 10) + jj))
-                    valueQueue = append(tempValueQueue, valueQueue[kk:])
-                    positionQueue = append(tempPositionQueue, positionQueue[kk:])
-                    break
+            if len(valueQueue) == 0 {
+                tempValueQueue = append(tempValueQueue, valuesAllowedInCurr)
+                tempPositionQueue = append(tempPositionQueue, ((ii * 10) + jj))
+            } else {
+                for kk := 0; kk < len(valueQueue); kk++ {
+                    if valueQueue[kk] >= valuesAllowedInCurr {
+                        tempValueQueue = append(valueQueue[:kk], valuesAllowedInCurr)
+                        tempPositionQueue = append(positionQueue[:kk], ((ii * 10) + jj))
+                        for ll := kk; ll < len(valueQueue); ll++ {
+                            tempValueQueue = append(tempValueQueue, valueQueue[ll])
+                        }
+                        for mm := kk; mm < len(positionQueue); mm++ {
+                            tempValueQueue = append(tempValueQueue, valueQueue[mm])
+                        }
+
+                        break
+                    }
                 }
             }
-            valueQueue = append(valueQueue, valuesAllowedInCurr)
+            valueQueue = tempValueQueue
+            positionQueue = tempPositionQueue
+            tempValueQueue = tempValueQueue[:0]
+            tempPositionQueue = tempPositionQueue[:0]
             valuesAllowedInCurr = 0
         }
     }
