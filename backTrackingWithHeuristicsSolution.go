@@ -118,18 +118,19 @@ func prioritize(board [][]byte) []int {
                 }
             }
             if len(valueQueue) == 0 {
-                tempValueQueue = append(tempValueQueue, valuesAllowedInCurr)
-                tempPositionQueue = append(tempPositionQueue, ((ii * 10) + jj))
+                valueQueue = append(valueQueue, valuesAllowedInCurr)
+                positionQueue = append(positionQueue, ((ii * 10) + jj))
+                continue
             } else {
                 for kk := 0; kk < len(valueQueue); kk++ {
-                    if valueQueue[kk] >= valuesAllowedInCurr {
+                    if valueQueue[kk] >= valuesAllowedInCurr || kk == (len(valueQueue) - 1) {
                         tempValueQueue = append(valueQueue[:kk], valuesAllowedInCurr)
                         tempPositionQueue = append(positionQueue[:kk], ((ii * 10) + jj))
                         for ll := kk; ll < len(valueQueue); ll++ {
                             tempValueQueue = append(tempValueQueue, valueQueue[ll])
                         }
                         for mm := kk; mm < len(positionQueue); mm++ {
-                            tempValueQueue = append(tempValueQueue, valueQueue[mm])
+                            tempPositionQueue = append(tempPositionQueue, valueQueue[mm])
                         }
 
                         break
@@ -137,6 +138,7 @@ func prioritize(board [][]byte) []int {
                 }
             }
             valueQueue = tempValueQueue
+            fmt.Print(valueQueue)
             positionQueue = tempPositionQueue
             tempValueQueue = tempValueQueue[:0]
             tempPositionQueue = tempPositionQueue[:0]
