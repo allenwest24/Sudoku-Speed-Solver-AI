@@ -1,5 +1,3 @@
-// This is the naive implementation of backtracking.
-
 const SQUARE_LENGTH = 9
 
 func isSolved(board [][]byte) bool {
@@ -60,8 +58,6 @@ func assessBoard(board [][]byte) [9][9]int {
 
 // Solve the sudoku puzzle.
 func solve(board [][]byte, heuristicQueue []int) bool {
-    //var heuristicBoard [9][9]int = assessBoard(board)
-    //fmt.Print(heuristicBoard)
     var currii int
     var currjj int
     if len(heuristicQueue) == 0 {
@@ -71,25 +67,6 @@ func solve(board [][]byte, heuristicQueue []int) bool {
         currjj = heuristicQueue[0] % 10
         fmt.Print(currii, currjj)
     }
-    // Depth first search.
-    //for ii := 0; ii < SQUARE_LENGTH; ii++ {
-      //  for jj := 0; jj < SQUARE_LENGTH; jj++ {
-        //    if ((currBest == 0 || heuristicBoard[ii][jj] < currBest) && heuristicBoard[ii][jj] != 0) {
-          //      currBest = heuristicBoard[ii][jj]
-            //    currBestii = ii
-              //  currBestjj = jj
-            //}
-        //}
-    //}
-    
-    //if currBest == 0 && !isSolved(board) {
-    //    return false
-    //}
-    //if currBest == 0 {
-    //    return true
-    //}       
-    // For every valid value that fits within this box, call solve on it.
-    // This will resemble a decision tree.
 	for val := byte('1'); val <= byte('9'); val++ {
         // Check to see if this value fits into the current solution.
 		if isValid(board, currii, currjj, val) {
@@ -109,8 +86,6 @@ func solve(board [][]byte, heuristicQueue []int) bool {
 func prioritize(board [][]byte) []int {
     var valueQueue []int
     var positionQueue []int
-    //var tempValueQueue []int
-    //var tempPositionQueue []int
     var valuesAllowedInCurr int = 0
     for ii := 0; ii < SQUARE_LENGTH; ii++ {
         for jj := 0; jj < SQUARE_LENGTH; jj++ {
@@ -139,30 +114,15 @@ func prioritize(board [][]byte) []int {
                         valueQueue[kk] = valuesAllowedInCurr
                         positionQueue = append(positionQueue[:kk+1], positionQueue[kk:]...)
                         positionQueue[kk] = ((ii * 10) + jj)
-                        //tempValueQueue = append(valueQueue[:kk], valuesAllowedInCurr)
-                        //tempPositionQueue = append(positionQueue[:kk], ((ii * 10) + jj))
-                        //for ll := kk; ll < len(valueQueue); ll++ {
-                        //    tempValueQueue = append(tempValueQueue, valueQueue[ll])
-                        //}
-                        //for mm := kk; mm < len(positionQueue); mm++ {
-                        //    tempPositionQueue = append(tempPositionQueue, valueQueue[mm])
-                        //}
-
                         break
                     }
                 }
             }
-            //valueQueue = tempValueQueue
             fmt.Print(valueQueue)
             fmt.Print(positionQueue)
-            //positionQueue = tempPositionQueue
-            //tempValueQueue = tempValueQueue[:0]
-            //tempPositionQueue = tempPositionQueue[:0]
             valuesAllowedInCurr = 0
         }
     }
-    //fmt.Print(valueQueue)
-    //fmt.Print(positionQueue)
     return positionQueue
 }
 
@@ -171,4 +131,3 @@ func solveSudoku(board [][]byte) {
     var heuristicQueue []int = prioritize(board)
     solve(board, heuristicQueue)
 }
-
