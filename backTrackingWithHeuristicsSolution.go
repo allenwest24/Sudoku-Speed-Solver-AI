@@ -148,6 +148,7 @@ func prioritize(board [][]byte) []int {
             }
             //valueQueue = tempValueQueue
             fmt.Print(valueQueue)
+            fmt.Print(positionQueue)
             //positionQueue = tempPositionQueue
             //tempValueQueue = tempValueQueue[:0]
             //tempPositionQueue = tempPositionQueue[:0]
@@ -155,7 +156,7 @@ func prioritize(board [][]byte) []int {
         }
     }
     //fmt.Print(valueQueue)
-    fmt.Print(positionQueue)
+    //fmt.Print(positionQueue)
     return positionQueue
 }
 
@@ -165,4 +166,3 @@ func solveSudoku(board [][]byte) {
     heuristicQueue = append(heuristicQueue, 1)
     solve(board)
 }
-
