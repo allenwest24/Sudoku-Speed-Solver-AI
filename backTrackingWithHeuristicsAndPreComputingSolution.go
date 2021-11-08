@@ -1,0 +1,177 @@
+// This is the naive implementation of backtracking.
+
+const SQUARE_LENGTH = 9
+
+func isSolved(board [][]byte) bool {
+    var solved = true
+    for ii := 0; ii < SQUARE_LENGTH; ii++ {
+        for jj := 0; jj < SQUARE_LENGTH; jj++ {
+            if board[ii][jj] == '.' {
+                solved = false
+                break
+            }
+        }
+    }
+    return solved
+}
+
+func isValid(board [][]byte, row, column int, val byte) bool {
+	for ii := 0; ii < SQUARE_LENGTH; ii++ {
+        // Is this value already in this column?
+        if board[ii][column] == val {
+            return false
+        }
+        // Is this value already in this row?
+        if board[row][ii] == val {
+			return false
+		}
+        // Is this value already in this box?
+        boxRow := ((row / 3) * 3) + (ii / 3)
+        boxColumn := ((column / 3) * 3) + (ii % 3)
+		if board[boxRow][boxColumn] == val {
+			return false
+		}
+	}
+    // If this value is not found in any conflicting locations, it is valid.
+	return true
+}
+
+func assessBoard(board [][]byte) [9][9]int {
+    var heuristicBoard [9][9]int
+    var valuesAllowedInCurr int = 0
+    for ii := 0; ii < SQUARE_LENGTH; ii++ {
+        for jj := 0; jj < SQUARE_LENGTH; jj++ {
+            if (board[ii][jj] != '.') {
+                heuristicBoard[ii][jj] = 0
+				continue
+			}
+            for val := byte('1'); val <= byte('9'); val++ {
+                // Check to see if this value fits into the current solution.
+				if isValid(board, ii, jj, val) {
+					valuesAllowedInCurr++
+                }
+            }
+            heuristicBoard[ii][jj] = valuesAllowedInCurr
+            valuesAllowedInCurr = 0
+        }
+    }
+    return heuristicBoard
+}
+
+// Solve the sudoku puzzle.
+func solve(board [][]byte, heuristicQueue []int) bool {
+    //var heuristicBoard [9][9]int = assessBoard(board)
+    //fmt.Print(heuristicBoard)
+    var currii int
+    var currjj int
+    if len(heuristicQueue) == 0 {
+        return true
+    } else {
+        currii = heuristicQueue[0] / 10
+        currjj = heuristicQueue[0] % 10
+        //fmt.Print(currii, currjj)
+    }
+    // Depth first search.
+    //for ii := 0; ii < SQUARE_LENGTH; ii++ {
+      //  for jj := 0; jj < SQUARE_LENGTH; jj++ {
+        //    if ((currBest == 0 || heuristicBoard[ii][jj] < currBest) && heuristicBoard[ii][jj] != 0) {
+          //      currBest = heuristicBoard[ii][jj]
+            //    currBestii = ii
+              //  currBestjj = jj
+            //}
+        //}
+    //}
+    
+    //if currBest == 0 && !isSolved(board) {
+    //    return false
+    //}
+    //if currBest == 0 {
+    //    return true
+    //}       
+    // For every valid value that fits within this box, call solve on it.
+    // This will resemble a decision tree.
+	for val := byte('1'); val <= byte('9'); val++ {
+        // Check to see if this value fits into the current solution.
+		if isValid(board, currii, currjj, val) {
+			board[currii][currjj] = val
+            if solve(board, heuristicQueue[1:]) {
+				return true
+			} else {
+                // We leave the '.' in this box so we can see where it went wrong.
+				board[currii][currjj] = '.'
+			}
+        } 
+	}
+    // No values fit. Break this branch.
+	return false
+}
+
+func prioritize(board [][]byte) []int {
+    var valueQueue []int
+    var positionQueue []int
+    //var tempValueQueue []int
+    //var tempPositionQueue []int
+    var valuesAllowedInCurr int = 0
+    for ii := 0; ii < SQUARE_LENGTH; ii++ {
+        for jj := 0; jj < SQUARE_LENGTH; jj++ {
+            if (board[ii][jj] != '.') {
+				continue
+			}
+            for val := byte('1'); val <= byte('9'); val++ {
+                // Check to see if this value fits into the current solution.
+				if isValid(board, ii, jj, val) {
+					valuesAllowedInCurr++
+                }
+            }
+            if len(valueQueue) == 0 {
+                valueQueue = append(valueQueue, valuesAllowedInCurr)
+                positionQueue = append(positionQueue, ((ii * 10) + jj))
+                continue
+            } else {
+                for kk := 0; kk <= len(valueQueue); kk++ {
+                    if kk == len(valueQueue) {
+                        valueQueue = append(valueQueue, valuesAllowedInCurr)
+                        positionQueue = append(positionQueue, ((ii * 10) + jj))
+                        break
+                    }
+                    if valueQueue[kk] >= valuesAllowedInCurr {
+                        valueQueue = append(valueQueue[:kk+1], valueQueue[kk:]...)
+                        valueQueue[kk] = valuesAllowedInCurr
+                        positionQueue = append(positionQueue[:kk+1], positionQueue[kk:]...)
+                        positionQueue[kk] = ((ii * 10) + jj)
+                        //tempValueQueue = append(valueQueue[:kk], valuesAllowedInCurr)
+                        //tempPositionQueue = append(positionQueue[:kk], ((ii * 10) + jj))
+                        //for ll := kk; ll < len(valueQueue); ll++ {
+                        //    tempValueQueue = append(tempValueQueue, valueQueue[ll])
+                        //}
+                        //for mm := kk; mm < len(positionQueue); mm++ {
+                        //    tempPositionQueue = append(tempPositionQueue, valueQueue[mm])
+                        //}
+
+                        break
+                    }
+                }
+            }
+            //valueQueue = tempValueQueue
+            //fmt.Print(valueQueue)
+            //fmt.Print(positionQueue)
+            //positionQueue = tempPositionQueue
+            //tempValueQueue = tempValueQueue[:0]
+            //tempPositionQueue = tempPositionQueue[:0]
+            valuesAllowedInCurr = 0
+        }
+    }
+    //fmt.Print(valueQueue)
+    //fmt.Print(positionQueue)
+    return positionQueue
+}
+
+// Invokes a helper method that can recursively call itself then return the valid solution.
+func solveSudoku(board [][]byte) {
+    //var heuristicQueue []int = prioritize(board)
+    //fmt.Print(heuristicQueue)
+    var heuristicQueue = []int{43, 74, 65, 45, 75, 62, 60, 53, 44, 35, 32, 23, 15, 11, 3, 88, 87, 85, 84, 78, 77, 73, 68, 51, 47, 41, 38, 36, 30, 24, 21, 20, 17, 16, 10, 8, 7, 6, 4, 82, 81, 80, 66, 57, 56, 54, 52, 46, 28, 26, 22, 0, 86, 71, 70, 58, 50, 42, 2}
+
+    solve(board, heuristicQueue)
+}
+
