@@ -59,40 +59,46 @@ func assessBoard(board [][]byte) [9][9]int {
 }
 
 // Solve the sudoku puzzle.
-func solve(board [][]byte) bool {
-    var heuristicBoard [9][9]int = assessBoard(board)
+func solve(board [][]byte, heuristicQueue []int) bool {
+    //var heuristicBoard [9][9]int = assessBoard(board)
     //fmt.Print(heuristicBoard)
-    var currBest = 0
-    var currBestii = 0
-    var currBestjj = 0
-    // Depth first search.
-    for ii := 0; ii < SQUARE_LENGTH; ii++ {
-        for jj := 0; jj < SQUARE_LENGTH; jj++ {
-            if ((currBest == 0 || heuristicBoard[ii][jj] < currBest) && heuristicBoard[ii][jj] != 0) {
-                currBest = heuristicBoard[ii][jj]
-                currBestii = ii
-                currBestjj = jj
-            }
-        }
-    }
-    if currBest == 0 && !isSolved(board) {
-        return false
-    }
-    if currBest == 0 {
+    var currii int
+    var currjj int
+    if len(heuristicQueue) == 0 {
         return true
+    } else {
+        currii = heuristicQueue[0] / 10
+        currjj = heuristicQueue[0] % 10
+        fmt.Print(currii, currjj)
     }
-            
+    // Depth first search.
+    //for ii := 0; ii < SQUARE_LENGTH; ii++ {
+      //  for jj := 0; jj < SQUARE_LENGTH; jj++ {
+        //    if ((currBest == 0 || heuristicBoard[ii][jj] < currBest) && heuristicBoard[ii][jj] != 0) {
+          //      currBest = heuristicBoard[ii][jj]
+            //    currBestii = ii
+              //  currBestjj = jj
+            //}
+        //}
+    //}
+    
+    //if currBest == 0 && !isSolved(board) {
+    //    return false
+    //}
+    //if currBest == 0 {
+    //    return true
+    //}       
     // For every valid value that fits within this box, call solve on it.
     // This will resemble a decision tree.
 	for val := byte('1'); val <= byte('9'); val++ {
         // Check to see if this value fits into the current solution.
-		if isValid(board, currBestii, currBestjj, val) {
-			board[currBestii][currBestjj] = val
-			if solve(board) {
+		if isValid(board, currii, currjj, val) {
+			board[currii][currjj] = val
+            if solve(board, heuristicQueue[1:]) {
 				return true
 			} else {
                 // We leave the '.' in this box so we can see where it went wrong.
-				board[currBestii][currBestjj] = '.'
+				board[currii][currjj] = '.'
 			}
         } 
 	}
@@ -163,6 +169,6 @@ func prioritize(board [][]byte) []int {
 // Invokes a helper method that can recursively call itself then return the valid solution.
 func solveSudoku(board [][]byte) {
     var heuristicQueue []int = prioritize(board)
-    heuristicQueue = append(heuristicQueue, 1)
-    solve(board)
+    solve(board, heuristicQueue)
 }
+
