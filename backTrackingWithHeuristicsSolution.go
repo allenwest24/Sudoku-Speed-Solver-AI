@@ -34,28 +34,6 @@ func isValid(board [][]byte, row, column int, val byte) bool {
 	return true
 }
 
-func assessBoard(board [][]byte) [9][9]int {
-    var heuristicBoard [9][9]int
-    var valuesAllowedInCurr int = 0
-    for ii := 0; ii < SQUARE_LENGTH; ii++ {
-        for jj := 0; jj < SQUARE_LENGTH; jj++ {
-            if (board[ii][jj] != '.') {
-                heuristicBoard[ii][jj] = 0
-				continue
-			}
-            for val := byte('1'); val <= byte('9'); val++ {
-                // Check to see if this value fits into the current solution.
-				if isValid(board, ii, jj, val) {
-					valuesAllowedInCurr++
-                }
-            }
-            heuristicBoard[ii][jj] = valuesAllowedInCurr
-            valuesAllowedInCurr = 0
-        }
-    }
-    return heuristicBoard
-}
-
 // Solve the sudoku puzzle.
 func solve(board [][]byte, heuristicQueue []int) bool {
     var currii int
