@@ -17,23 +17,23 @@ func isSolved(board [][]byte) bool {
 
 // Determines if a given value at a given location in a puzzle is a valid placement.
 func isValid(board [][]byte, row, column int, val byte) bool {
-	for ii := 0; ii < SQUARE_LENGTH; ii++ {
+    for ii := 0; ii < SQUARE_LENGTH; ii++ {
         // Is this value already in this column?
         if board[ii][column] == val {
             return false
         }
         // Is this value already in this row?
         if board[row][ii] == val {
-			return false
-		}
+	    return false
+	}
         // Is this value already in this box?
         boxRow := ((row / 3) * 3) + (ii / 3)
         boxColumn := ((column / 3) * 3) + (ii % 3)
-		if board[boxRow][boxColumn] == val {
-			return false
-		}
+	if board[boxRow][boxColumn] == val {
+	    return false
 	}
-	return true
+    }
+    return true
 }
 
 // Main method for this solution.
