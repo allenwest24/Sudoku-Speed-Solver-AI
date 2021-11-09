@@ -1,8 +1,11 @@
 # Sudoku-Speed-Solver-AI
 
 ## Solutions:
- - naiveDFSSolution: Goes through a depth-first dearch of the board and only places values if they are the only possible value for this square.
- - naiveBacktrackingDFSSolution: Goes through depth-first dearch of the board and uses a decision tree to go down a branch for every possible value until one results in the puzzle being solved.
+The following are rough times for "evil' sudoku puzzles:
+ - naiveDFSSolution: Does not solve reliably.
+ - naiveBacktrackingDFSSolution: ~350 ms
+ - backTrackingWithHeuristicsSolution: ~30 ms
+ - backTrackingWithHeuristicsAndPreComputingSolution: ~ 5 ms
 
 # Tests:
 tests.txt is a file that contains 3 easy, 3 medium, 3 hard, 3 expert, and 3 evil puzzles. 
