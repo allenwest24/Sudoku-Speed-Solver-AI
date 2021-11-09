@@ -60,47 +60,6 @@ func solve(board [][]byte, heuristicQueue []int) bool {
 	return false
 }
 
-func prioritize(board [][]byte) []int {
-    var valueQueue []int
-    var positionQueue []int
-    var valuesAllowedInCurr int = 0
-    for ii := 0; ii < SQUARE_LENGTH; ii++ {
-        for jj := 0; jj < SQUARE_LENGTH; jj++ {
-            if (board[ii][jj] != '.') {
-				continue
-			}
-            for val := byte('1'); val <= byte('9'); val++ {
-                // Check to see if this value fits into the current solution.
-				if isValid(board, ii, jj, val) {
-					valuesAllowedInCurr++
-                }
-            }
-            if len(valueQueue) == 0 {
-                valueQueue = append(valueQueue, valuesAllowedInCurr)
-                positionQueue = append(positionQueue, ((ii * 10) + jj))
-                continue
-            } else {
-                for kk := 0; kk <= len(valueQueue); kk++ {
-                    if kk == len(valueQueue) {
-                        valueQueue = append(valueQueue, valuesAllowedInCurr)
-                        positionQueue = append(positionQueue, ((ii * 10) + jj))
-                        break
-                    }
-                    if valueQueue[kk] >= valuesAllowedInCurr {
-                        valueQueue = append(valueQueue[:kk+1], valueQueue[kk:]...)
-                        valueQueue[kk] = valuesAllowedInCurr
-                        positionQueue = append(positionQueue[:kk+1], positionQueue[kk:]...)
-                        positionQueue[kk] = ((ii * 10) + jj)
-                        break
-                    }
-                }
-            }
-            valuesAllowedInCurr = 0
-        }
-    }
-    return positionQueue
-}
-
 // Invokes a helper method that can recursively call itself then return the valid solution.
 func solveSudoku(board [][]byte) {
     //var heuristicQueue []int = prioritize(board)
@@ -108,4 +67,3 @@ func solveSudoku(board [][]byte) {
 
     solve(board, heuristicQueue)
 }
-
