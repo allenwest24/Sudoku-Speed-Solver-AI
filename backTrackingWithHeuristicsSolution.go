@@ -68,12 +68,12 @@ func prioritize(board [][]byte) []int {
     for ii := 0; ii < SQUARE_LENGTH; ii++ {
         for jj := 0; jj < SQUARE_LENGTH; jj++ {
             if (board[ii][jj] != '.') {
-				continue
-			}
+		continue
+	    }
             for val := byte('1'); val <= byte('9'); val++ {
                 // Check to see if this value fits into the current solution.
-				if isValid(board, ii, jj, val) {
-					valuesAllowedInCurr++
+		if isValid(board, ii, jj, val) {
+		    valuesAllowedInCurr++
                 }
             }
             if len(valueQueue) == 0 {
