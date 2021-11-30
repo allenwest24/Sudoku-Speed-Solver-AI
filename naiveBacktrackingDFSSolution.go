@@ -1,3 +1,10 @@
+package main
+
+import (
+        "fmt"
+        "time"
+)
+
 // Size of side of square.
 const SQUARE_LENGTH = 9
 
@@ -57,7 +64,22 @@ func solve(board [][]byte) bool {
 }
 
 // Invokes a helper method that can recursively call itself then return the valid solution.
-func solveSudoku(board [][]byte) {
+func main() {
+    board := [][]byte {
+            {byte('.'),byte('4'),byte('.'),byte('.'),byte('.'),byte('2'),byte('.'),byte('.'),byte('.')},
+            {byte('.'),byte('.'),byte('8'),byte('4'),byte('7'),byte('.'),byte('.'),byte('.'),byte('5')},
+            {byte('.'),byte('.'),byte('.'),byte('.'),byte('.'),byte('6'),byte('.'),byte('7'),byte('.')},
+            {byte('.'),byte('6'),byte('.'),byte('9'),byte('1'),byte('.'),byte('.'),byte('5'),byte('.')},
+            {byte('3'),byte('.'),byte('.'),byte('.'),byte('.'),byte('.'),byte('.'),byte('.'),byte('8')},
+            {byte('.'),byte('.'),byte('.'),byte('.'),byte('.'),byte('7'),byte('.'),byte('.'),byte('.')},
+            {byte('.'),byte('9'),byte('.'),byte('5'),byte('4'),byte('.'),byte('.'),byte('1'),byte('.')},
+            {byte('.'),byte('.'),byte('6'),byte('.'),byte('.'),byte('.'),byte('9'),byte('.'),byte('.')},
+            {byte('.'),byte('.'),byte('.'),byte('2'),byte('.'),byte('.'),byte('.'),byte('.'),byte('.')}}
+    start := time.Now()
     solve(board)
+    t := time.Now()
+    elapsed := t.Sub(start)
+    fmt.Print(elapsed)
+    fmt.Print("\n\n")
 }
 
