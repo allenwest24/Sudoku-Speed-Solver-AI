@@ -53,38 +53,28 @@ func solve(board [][]byte, heuristicQueue []int) bool {
         currii = heuristicQueue[0] / 10
         currjj = heuristicQueue[0] % 10
     }
-	for x := 0; x < SQUARE_LENGTH; x++ {
-	    //valQ := []byte {byte('4'), byte('5'), byte('6'), byte('7'), byte('9'), byte('1'), byte('2'), byte('8'), byte('3')}
-	    valQ := []byte {byte('3'), byte('8'), byte('2'), byte('1'), byte('9'), byte('7'), byte('6'), byte('5'), byte('4')}
-	    val := valQ[x]
-            // Check to see if this value fits into the current solution.
-	    if isValid(board, currii, currjj, val) {
-		board[currii][currjj] = val
-            if solve(board, heuristicQueue[1:]) {
-				return true
-			} else {
-                // We leave the '.' in this box so we can see where it went wrong.
-				board[currii][currjj] = '.'
-			}
-        } 
-	}
+    for x := 0; x < SQUARE_LENGTH; x++ {
+	valQ := []byte {}
+	val := valQ[x]
+        // Check to see if this value fits into the current solution.
+	if isValid(board, currii, currjj, val) {
+	    board[currii][currjj] = val
+	    if solve(board, heuristicQueue[1:]) {
+		return true
+	    } else {
+		// We leave the '.' in this box so we can see where it went wrong.
+		board[currii][currjj] = '.'
+	    }
+	} 
+    }
     // No values fit. Break this branch.
 	return false
 }
 
 // Invokes a helper method that can recursively call itself then return the valid solution.
 func main() {
-    board := [][]byte {
-            {byte('.'),byte('4'),byte('.'),byte('.'),byte('.'),byte('2'),byte('.'),byte('.'),byte('.')},
-            {byte('.'),byte('.'),byte('8'),byte('4'),byte('7'),byte('.'),byte('.'),byte('.'),byte('5')},
-            {byte('.'),byte('.'),byte('.'),byte('.'),byte('.'),byte('6'),byte('.'),byte('7'),byte('.')},
-            {byte('.'),byte('6'),byte('.'),byte('9'),byte('1'),byte('.'),byte('.'),byte('5'),byte('.')},
-            {byte('3'),byte('.'),byte('.'),byte('.'),byte('.'),byte('.'),byte('.'),byte('.'),byte('8')},
-            {byte('.'),byte('.'),byte('.'),byte('.'),byte('.'),byte('7'),byte('.'),byte('.'),byte('.')},
-            {byte('.'),byte('9'),byte('.'),byte('5'),byte('4'),byte('.'),byte('.'),byte('1'),byte('.')},
-            {byte('.'),byte('.'),byte('6'),byte('.'),byte('.'),byte('.'),byte('9'),byte('.'),byte('.')},
-            {byte('.'),byte('.'),byte('.'),byte('2'),byte('.'),byte('.'),byte('.'),byte('.'),byte('.')}}
-    var heuristicQueue = []int{43, 74, 65, 45, 75, 62, 60, 53, 44, 35, 32, 23, 15, 11, 3, 88, 87, 85, 84, 78, 77, 73, 68, 51, 47, 41, 38, 36, 30, 24, 21, 20, 17, 16, 10, 8, 7, 6, 4, 82, 81, 80, 66, 57, 56, 54, 52, 46, 28, 26, 22, 0, 86, 71, 70, 58, 50, 42, 2}
+    board := [][]byte {{}}
+    var heuristicQueue = []int{}
     start := time.Now()
     solve(board, heuristicQueue)
     t := time.Now()
