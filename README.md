@@ -2,6 +2,15 @@
 By Allen West and
 Walter Geanacopoulos
 
+## Guide to Contents of this Repository:
+- demo/: this contains both live demos, fast and slow, as well as the three solutions pre-loaded with an evil puzzle that will print out the time it takes to solve it.
+- tools/: homemade tools we had to make in order to format queues, boards, and other things.
+- naiveDFSSolution.go: SLOW  - uses depth-first search and basic rules to solve only if one value is valid in a square.
+- naiveBackTrackingDFSSolution.go: MORE RELIABLE - first attempt at using the backtracking algorithm.
+- backTrackingWithHeuristicsAndPreComputingSolution.go: FAST - uses heuristics to determine which squares we backtrack on first.
+- backTrackingWithOrderedVals.go: INSANELY FAST - combines all previous enhancements with careful ordering of the values we try to place first.
+To see how these solutions compared to each other in the end please go to our results section below!
+
 ## Introduction:
 To understand what we wanted to accomplish we first have to understand what Sodoku is and how the game is played. A typical game board is of equal length to equal height. Even though there may be other boards and combinations, we stuck to the standard boards mentioned above. At the start of the game there are numbers already preset on the board which can not be changed. From there, the goal is to fill the empty spaces with the right numbers. Each line going horizontally and vertically, as well as the 3x3  subset blocks, must have all numbers 1 - 9 without any repeats. 
 
@@ -36,10 +45,10 @@ By reordering the numbers we try at the beginning, then we can backtrack less by
 ## Putting It All Together:
 We will now show you the results of our major improvements. The naive implementation is the original depth-first search attempt of going through the board and only solving a square when there is only one possible answer. The backtracking solution still uses depth-first search but now ensures that every square gets solved. The priority queue implementation takes all previous improvements and searches for squares that are more likely to be solved and tries those first. This prioritization work is done ahead of time. The optimal found solution is a combination of all previous solutions with the heuristics we found to be helpful. 
 
+## Results:
 Naive Backtracking - Evil - 18.430 ms (0.02 seconds)
 Priority Queue (Based on Simple Heuristics) - Evil - 2.684 ms (0.002 seconds)
 Optimal Solution (With Value Ordering) - Evil - 146.327 μs (0.0001 seconds)
-
 
 ## If We had More Time:
 If we had more time to increase the speed or capability of our AI, we would possible consider some of the following ideas:
